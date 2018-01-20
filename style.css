@@ -1,0 +1,67 @@
+*{
+margin:0;
+padding:0;
+}
+
+*{
+    box-sizing: border-box;
+}
+
+.window{
+    width: 400px;
+    height: 300px;
+    margin: 20px auto;
+    overflow: hidden;/*让多余的看不见*/
+}
+
+.images{
+    /* display: flex; */
+    position: relative;
+}
+
+.images > img{
+    width:100%;
+    transition: all 0.3s;
+    position: absolute;
+    top:0;
+}
+
+/* .images > img:nth-child(1){
+    position: absolute;
+    top:0;
+    left:0;
+}
+
+.images > img:nth-child(2){
+    position: absolute;
+    top:0;
+    left:100%;
+}
+
+.images > img:nth-child(3){
+    position: absolute;
+    top:0;
+    left:100%;
+}
+
+.images > img.right{
+    position: absolute;
+    top:0;
+    left:100%;
+} */
+
+.images >img.current{
+    left: 0px;
+    transform: translateX(0);
+    z-index: 1;  /*让current在最上面*/
+}
+
+.images >img.leave{
+    transform: translateX(-100%);
+    z-index: 1;
+}
+
+.images >img.enter{
+    transform: translateX(100%);
+}
+
