@@ -1,17 +1,21 @@
-$('.images >img:nth-child(1)').addClass('current')  
-$('.images >img:nth-child(2)').addClass('enter')  
-$('.images >img:nth-child(3)').addClass('enter')  
-
-let n=1
-
+let n
+初始化 ()
 setInterval(()=> {   
-    $(`.images >img:nth-child(${x(n)})`).removeClass('current').addClass('leave') 
+    makeLeave(getImage(n))  //
     .one('transitionend',(e)=>{
-        $(e.currentTarget).removeClass('leave').addClass('enter')
+        makeEnter($(e.currentTarget))
     })
-    $(`.images >img:nth-child(${x(n+1)})`).removeClass('enter').addClass('current')   
+    makeCurrent(getImage(n+1))  
     n += 1 
 }, 3000);
+
+
+//下面为封装的函数
+
+function getImage(n){
+   return  $(`.images >img:nth-child(${x(n)})`)
+}
+
 
 function x(n){
     if(n>3){
@@ -22,6 +26,29 @@ function x(n){
     }
     return n
 }
+
+function 初始化 (){
+    n=1
+    $(`.images >img:nth-child(${n})`).addClass('current')  
+   .siblings().addClass('enter')
+}
+
+function makeCurrent($node){
+    $node.removeClass('enter leave').addClass('current')  //用空格隔开，一次可以移除多个类
+    return $node     //如果不加，则makeLeave的返回值是undefined
+}
+
+function makeLeave($node){
+    $node.removeClass('enter current').addClass('leave')  //用空格隔开，一次可以移除多个类
+    return $node    //如果不加，则makeLeave的返回值是undefined
+}
+
+function makeEnter($node){
+    $node.removeClass('leave current').addClass('enter')  //用空格隔开，一次可以移除多个类
+    return $node    //如果不加，则makeLeave的返回值是undefined
+}
+
+
 
 
 // setTimeout(function() {
