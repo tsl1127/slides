@@ -1,101 +1,51 @@
-let n
-初始化 ()
-let timer = setInterval(()=> {   
-    makeLeave(getImage(n))  //
-    .one('transitionend',(e)=>{
-        makeEnter($(e.currentTarget))
-    })
-    makeCurrent(getImage(n+1))  
-    n += 1 
-}, 3000);
+let $buttons = $('#buttonWrapper>button')
+let $slides = $('#slides')
+let $images = $slides.children('img')
+let $firstCopy = $images.eq(0).clone(true)
+// console.log($firstCopy[0].outerHTML)
+let $lastCopy = $images.eq($images.length-1).clone(true)
+// console.log($lastCopy[0].outerHTML)
+$slides.append($firstCopy)  //把第一张放到最后去
+$slides.prepend($lastCopy)  //把最后一张放到最前面  
 
-document.addEventListener('visibilitychange',function(e){
-    // console.log(document.hidden)
-    if(document.hidden){
-        window.clearInterval(timer)  //把闹钟干掉
+$slides.css({transform:'translateX(-400px)'})   //让1在当前窗口
+
+
+let current = 0
+
+$buttons.eq(0).on('click',function(){
+    if(current ===2){
+        console.log('说明你是从最后一张到第一张')
+        $slides.css({transform:'translateX(-1600px)'})  
+        .one('transitionend',function(){
+            $slides.hide()
+            .offset()
+            $slides.css({transform:'translateX(-400px)'}) //要先隐藏再做动画，不然会被用户看穿
+            .show()
+        })
     }else{
-        timer = setInterval(()=> {   
-            makeLeave(getImage(n))  //
-            .one('transitionend',(e)=>{
-                makeEnter($(e.currentTarget))
-            })
-            makeCurrent(getImage(n+1))  
-            n += 1 
-        }, 3000);
+        $slides.css({transform:'translateX(-400px)'})       
     }
+    current =0
 })
 
+$buttons.eq(1).on('click',function(){
+        $slides.css({transform:'translateX(-800px)'})
+        current=1
+})
 
-//下面为封装的函数
-
-function getImage(n){
-   return  $(`.images >img:nth-child(${x(n)})`)
-}
-
-
-function x(n){
-    if(n>3){
-        n = n%3
-        if(n===0){
-            n=3
-        }
+$buttons.eq(2).on('click',function(){
+    if(current===0){
+        console.log('说明你是从第一张到最后一张')
+        $slides.css({transform:'translateX(0px)'})  
+        .one('transitionend',function(){
+            $slides.hide()
+            .offset()
+            $slides.css({transform:'translateX(-1200px)'}) //要先隐藏再做动画，不然会被用户看穿
+            .show()
+        })    
+    }else{
+        $slides.css({transform:'translateX(-1200px)'})
     }
-    return n
-}
-
-function 初始化 (){
-    n=1
-    $(`.images >img:nth-child(${n})`).addClass('current')  
-   .siblings().addClass('enter')
-}
-
-function makeCurrent($node){
-    $node.removeClass('enter leave').addClass('current')  //用空格隔开，一次可以移除多个类
-    return $node     //如果不加，则makeLeave的返回值是undefined
-}
-
-function makeLeave($node){
-    $node.removeClass('enter current').addClass('leave')  //用空格隔开，一次可以移除多个类
-    return $node    //如果不加，则makeLeave的返回值是undefined
-}
-
-function makeEnter($node){
-    $node.removeClass('leave current').addClass('enter')  //用空格隔开，一次可以移除多个类
-    return $node    //如果不加，则makeLeave的返回值是undefined
-}
-
-
-
-
-// setTimeout(function() {
-//     $('.images >img:nth-child(1)').removeClass('current').addClass('leave') 
-//     .one('transitionend',(e)=>{
-//         $(e.currentTarget).removeClass('leave').addClass('enter')
-//     })
-//     $('.images >img:nth-child(2)').removeClass('enter').addClass('current')    
-// }, 3000);
-
-
-// setTimeout(function() {
-//     $('.images >img:nth-child(2)').removeClass('current').addClass('leave') 
-//     .one('transitionend',(e)=>{
-//         $(e.currentTarget).removeClass('leave').addClass('enter')
-//     })
-//     $('.images >img:nth-child(3)').removeClass('enter').addClass('current')    
-// }, 6000);
-
-// setTimeout(function() {
-//     $('.images >img:nth-child(3)').removeClass('current').addClass('leave') 
-//     .one('transitionend',(e)=>{
-//         $(e.currentTarget).removeClass('leave').addClass('enter')
-//     })
-//     $('.images >img:nth-child(1)').removeClass('enter').addClass('current')    
-// }, 9000);
-
-// setTimeout(function() {
-//     $('.images >img:nth-child(1)').removeClass('current').addClass('leave') 
-//     .one('transitionend',(e)=>{
-//         $(e.currentTarget).removeClass('leave').addClass('enter')
-//     })
-//     $('.images >img:nth-child(2)').removeClass('enter').addClass('current')    
-// }, 12000);
+    current =2
+})
